@@ -1,1 +1,39 @@
+body {
+    margin: 0;
+    font-family: Aria, sans-serif;
+    background-color: #fff8fc;
+    color: #333;
+}
+ header {
+    background-color: #f5d9e8;
+    text-align: center;
+    padding: 40px 20px;
+ }
+ header h1 {
+    margin: 0;
+    color: #a63872;
+ }
 
+ header p {
+    margin-top: 12px;
+ }
+ main {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+ }
+
+ #gallery {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+ }
+ #gallery h22 {
+    color: #a63872;
+ }
+
+ footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+ }
