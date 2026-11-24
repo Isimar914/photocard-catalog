@@ -1,7 +1,7 @@
 import { db } from "./firebase.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
-const inventoryPages = [
+let inventoryPages = [
     {
         member: "Jurin",
         page: "A",
@@ -76,17 +76,17 @@ function displayInventory() {
     });
 }
 
-async function loadInventory() {
-    const querySnapshot = await getDocs(collection(db, "inventory"));
+function loadInventory() {
+    onSnapshot(collection(db, "inventory"), (querySnapshot) =>  {
+        const firebaseInventory = [];
 
-    const firebaseInventory = [];
+        querySnapshot.forEach(doc => {
+            firebaseInventory.push(doc.data());
+        });
 
-    querySnapshot.forEach(doc => {
-        firebaseInventory.push(doc.data());
+        inventoryPages = firebaseInventory;
+        displayInventory();
     });
-
-    console.log(firebaseInventory);
 }
 
 loadInventory();
-displayInventory();
