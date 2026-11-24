@@ -1,5 +1,6 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,4 +16,17 @@
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  console.log("Firebase initialized successfully!");
+
+  const db = getFirestore(app);
+
+  export { db };
+
+  async function testDatabase() {
+    const snapshot = await getDocs(collection(db, "inventory"));
+
+    snapshot.forEach((doc) => {
+        console.log(doc.id, doc.data());
+    });
+}
+
+testDatabase();
