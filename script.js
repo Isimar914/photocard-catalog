@@ -1,3 +1,6 @@
+import { db } from "./firebase.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
 const inventoryPages = [
     {
         member: "Jurin",
@@ -23,9 +26,9 @@ const inventoryPages = [
             {id: "B4", price: 8, status: "available" },
             {id: "B5", price: 8, status: "sold" },
             {id: "B6", price: 8, status: "sold" },
-            {id: "B6", price: 20, status: "sold" },
-            {id: "B6", price: 22, status: "sold" },
-            {id: "B6", price: 20, status: "sold" }
+            {id: "B7", price: 20, status: "sold" },
+            {id: "B8", price: 22, status: "sold" },
+            {id: "B9", price: 20, status: "sold" }
         ]
     }
 ];
@@ -73,4 +76,17 @@ function displayInventory() {
     });
 }
 
+async function loadInventory() {
+    const querySnapshot = await getDocs(collection(db, "inventory"));
+
+    const firebaseInventory = [];
+
+    querySnapshot.forEach(doc => {
+        firebaseInventory.push(doc.data());
+    });
+
+    console.log(firebaseInventory);
+}
+
+loadInventory();
 displayInventory();

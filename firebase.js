@@ -21,12 +21,4 @@
 
   export { db };
 
-  async function testDatabase() {
-    const snapshot = await getDocs(collection(db, "inventory"));
-
-    snapshot.forEach((doc) => {
-        console.log(doc.id, doc.data());
-    });
-}
-
-testDatabase();
+  
