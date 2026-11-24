@@ -30,3 +30,47 @@ const inventoryPages = [
     }
 ];
 
+const gallery = document.getElementById("gallery-grid");
+
+function displayInventory() {
+    gallery.innerHTML = "";
+
+    inventoryPages.forEach(page => {
+        const inventoryPage = document.createElement("div");
+
+        inventoryPage.classList.add("inventory-page");
+
+        inventoryPage.innerHTML = `
+            <h3>${page.member} - Page ${page.page}</h3>
+            <img src="${page.image}"
+                 alt="${page.member} Page ${page.page}"
+                 class="photocard-sheet">
+        `;
+
+        const priceGrid = document.createElement("div");
+        priceGrid.classList.add("price-grid");
+
+        page.cards.forEach(card => {
+            const priceBox = document.createElement("div");
+            priceBox.classList.add("price-box");
+
+            priceBox.innerHTML = `
+                <strong>${card.id}</strong>
+                <span>$${card.price}</span>
+                <span class="${card.status}">
+                    ${card.status === "available" ? "Available" :
+                      card.status === "sold" ? "Sold":
+                      "Not for Sale"
+                    }
+                </span>
+            `;
+
+            priceGrid.appendChild(priceBox);
+        });
+
+        inventoryPage.appendChild(priceGrid);
+        gallery.appendChild(inventoryPage);
+    });
+}
+
+displayInventory();
