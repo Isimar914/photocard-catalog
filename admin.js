@@ -8,6 +8,9 @@ const loginSection = document.getElementById("admin-login");
 const dashboard = document.getElementById("admin-dashboard");
 const logoutButton = document.getElementById("logout-button");
 const adminInventory = document.getElementById("admin-inventory");
+const addPageForm = document.getElementById("add-page-form");
+const addCardButton = document.getElementById("add-card-button");
+const newCards = document.getElementById("new-cards");
 
 const adminUID = "H80SEyhoE3eFouZd9xTuqXNXklD3"
 
@@ -142,3 +145,32 @@ async function loadAdminInventory() {
         adminInventory.appendChild(inventoryPage);
     });
 }
+
+addCardButton.addEventListener("click", () => {
+    const cardRow = document.createElement("div");
+    cardRow.classList.add("new-card-row");
+
+    cardRow.innerHTML = `
+        <input type="text" placeholder="Card ID" required>
+
+        <input type = "number" placeholder="Price"
+            min="0" step="0.01" required>
+
+        <select>
+            <option value="available">Available</option>
+            <option value="sold">Sold</option>
+            <option value="not-for-sale">Not For Sale</option>
+        </select>
+        
+        <button type="button" class="remove-card">
+            Remove
+        </button>
+    `;
+
+    cardRow.querySelector(".remove-card")
+        .addEventListener("click", () => {
+            cardRow.remove();
+        });
+
+    newCards.appendChild(cardRow);
+});
