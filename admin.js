@@ -71,7 +71,30 @@ async function loadAdminInventory() {
             const cardRow = document.createElement("div");
             cardRow.classList.add("admin-card-row");
 
-            cardRow.textContent = `${card.id} - $${card.price} - ${card.status}`;
+            const cardID = document.createElement("strong");
+            cardID.textContent = card.id;
+
+            const priceInput = document.createElement("input");
+            priceInput.type = "number";
+            priceInput.value = card.price;
+            priceInput.min = "0";
+            priceInput.step = "0.01";
+
+            const statusSelect = document.createElement("select");
+
+            statusSelect.innerHTML = `
+                <option value="available">Available</option>
+                <option value="sold">Sold</option>
+                <option value="not-for-sale">Not for Sale</option>
+            `;
+
+            statusSelect.value = card.status;
+
+            cardRow.appendChild(cardID);
+            cardRow.appendChild(priceInput);
+            cardRow.appendChild(statusSelect);
+
+
             inventoryPage.appendChild(cardRow);
         });
         adminInventory.appendChild(inventoryPage);
