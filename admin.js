@@ -75,8 +75,10 @@ async function loadAdminInventory() {
             const cardRow = document.createElement("div");
             cardRow.classList.add("admin-card-row");
 
-            const cardID = document.createElement("strong");
-            cardID.textContent = card.id;
+            const cardID = document.createElement("input");
+            cardID.type = "text";
+            cardID.value = card.id;
+            cardID.required = true;
 
             const priceInput = document.createElement("input");
             priceInput.type = "number";
@@ -96,6 +98,7 @@ async function loadAdminInventory() {
 
             editedCards.push({
                 card: card,
+                cardID: cardID,
                 priceInput: priceInput,
                 statusSelect: statusSelect
             });
@@ -117,6 +120,12 @@ async function loadAdminInventory() {
                 price: Number(item.priceInput.value),
                 status: item.statusSelect.value
             }));
+
+            if (updatedCards.some(card => !card.id) ||
+                new Set(updatedCards.map(card => card.id)).size !== updatedCards.length) {
+                alert("Please enter unique card IDs.");
+                return;
+            }
 
             const invalidPrice = editedCards.some(item => 
                 item.priceInput.value === "" ||
