@@ -1,6 +1,6 @@
 import { auth, db } from "./firebase.js";
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-import { collection, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+import { collection, getDocs, updateDoc, doc, runTransaction } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
 const loginForm = document.getElementById("login-form");
 const loginMessage = document.getElementById("login-message");
@@ -11,6 +11,8 @@ const adminInventory = document.getElementById("admin-inventory");
 const addPageForm = document.getElementById("add-page-form");
 const addCardButton = document.getElementById("add-card-button");
 const newCards = document.getElementById("new-cards");
+const cloudName = "npezncva";
+const uploadPreset = "photocard-upload";
 
 const adminUID = "H80SEyhoE3eFouZd9xTuqXNXklD3"
 
@@ -173,4 +175,98 @@ addCardButton.addEventListener("click", () => {
         });
 
     newCards.appendChild(cardRow);
+});
+
+async function uploadImage(file) {
+    const allowedTypes = [
+        "image/png",
+        "image/jpeg",
+        "image/webp"
+    ];
+
+    if (!file || !allowedTypes.includes(file.type)) {
+        throw new Error("Please select a valid image.");
+    }
+
+    if(file.size > 5 * 1024 * 1024) {
+        throw new Error("Image must be under 5 MB.")
+    }
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
+
+    const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        {
+            method: "POST",
+            body: formData
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Image upload failed.");
+    }
+
+    const data = await response.json();
+
+    return data.secure_url;
+};
+
+addPageForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const member = document.getElementById("member").value;
+    const page = document.getElementById("page-letter").value.trim().toUpperCase();
+    const imageFile = document.getElementById("page-image").files[0];
+
+    const cards = [];
+
+    newCards.querySelectorAll(".new-card-row").forEach(row => {
+        cards.push({
+            id: row.querySelector('input[type="text"]').value.trim().toUpperCase(),
+            price: Number(row.querySelector('input[type="number"]').value),
+            status: row.querySelector("select").value
+        });
+    });
+
+    if (!/^[A-Z]+$/.test(page) || cards.length === 0 ||
+        cards.some(card => !card.id) ||
+        new Set(cards.map(card => card.id)).size !== cards.length) {
+        alert("Enter a valid page letter and unique card IDs.");
+        return;
+    }
+
+    try {
+        const pageID = `${member.toLowerCase()}-${page.toLowerCase()}`;
+        const pageRef = doc(db, "inventory", pageID);
+
+        const imageURL = await uploadImage(imageFile);
+
+        await runTransaction(db, async transaction => {
+            const existingPage = await transaction.get(pageRef);
+
+            if (existingPage.exists()) {
+                throw new Error("This inventory page already exists.");
+            }
+
+            transaction.set(pageRef, {
+                member,
+                page,
+                image: imageURL,
+                cards
+            });
+        });
+
+        alert("Inventory page added successfully!");
+
+        addPageForm.reset();
+        newCards.innerHTML = "";
+
+        loadAdminInventory();
+
+    } catch (error) {
+        alert(error.message);
+    }
 });
