@@ -1,6 +1,6 @@
 import { auth, db } from "./firebase.js";
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+import { collection, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
 const loginForm = document.getElementById("login-form");
 const loginMessage = document.getElementById("login-message");
@@ -58,6 +58,7 @@ async function loadAdminInventory() {
 
     querySnapshot.forEach(doc => {
         const page = doc.data();
+        const editedCards = [];
 
         const inventoryPage = document.createElement("div");
         inventoryPage.classList.add("admin-inventory-page");
@@ -90,6 +91,12 @@ async function loadAdminInventory() {
 
             statusSelect.value = card.status;
 
+            editedCards.push({
+                card: card,
+                priceInput: priceInput,
+                statusSelect: statusSelect
+            });
+
             cardRow.appendChild(cardID);
             cardRow.appendChild(priceInput);
             cardRow.appendChild(statusSelect);
@@ -97,6 +104,41 @@ async function loadAdminInventory() {
 
             inventoryPage.appendChild(cardRow);
         });
+
+        const saveButton = document.createElement("button");
+        saveButton.textContent = "Save Changes";
+        saveButton.classList.add("save-button");
+        saveButton.addEventListener("click", async() => {
+            const updatedCards = editedCards.map(item => ({
+                ...item.card,
+                price: Number(item.priceInput.value),
+                status: item.statusSelect.value
+            }));
+
+            const invalidPrice = editedCards.some(item => 
+                item.priceInput.value === "" ||
+                !item.priceInput.validity.valid
+            );
+
+            if (invalidPrice) {
+                alert("Please enter valid prices");
+                return;
+            }
+
+            try {
+                await updateDoc(doc.ref, {
+                    cards: updatedCards
+                });
+
+                alert("change saved succesfully!");
+            } catch (error) {
+                alert ("Unable to save changes.");
+                console.error(error);
+            }
+        });
+            
+        inventoryPage.appendChild(saveButton);
+
         adminInventory.appendChild(inventoryPage);
     });
 }
