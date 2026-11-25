@@ -99,3 +99,44 @@ body {
     margin: 20px 0;
     font-size: 20px;
 }
+
+/* Admin Login Page */
+
+#admin-login {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px,8px rgba(0, 0, 0, 0.1);
+}
+#admin0login h2 {
+    text-align: center;
+}
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+#login-form input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+#login-form button {
+    padding: 12px;
+    background-color: #d63384;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+#login-form button:hover {
+    background-color: #b82b70;
+}
+
+#login-message {
+    text-align: center;
+}
