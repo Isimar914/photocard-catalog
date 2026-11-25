@@ -35,8 +35,39 @@
 
             <button id="logout-button">Log Out</button>
 
+            <h3>Add Inventory Page</h3>
+            <form id="add-page-form">
+                <label for="member">Member</label>
+                <select id="member" required>
+                    <option value="">Select Member</option>
+                    <option value="Jurin">Jurin</option>
+                    <option value="Chisa">Chisa</option>
+                    <option value="Hinata">Hinata</option>
+                    <option value="Harvey">Harvey</option>
+                    <option value="Juria">Juria</option>
+                    <option value="Maya">Maya</option>
+                    <option value="Cocona">Cocona</option>
+                    <option value="Group">Group</option>
+                </select>
+
+                <label for="page-letter">Page Letter</label>
+                <input type="text" id="page-letter" required>
+
+                <label for="page-image">Binder Image</label>
+                <input type="file" id="page-image" accept="image/*" required>
+
+                <h4>Photocards</h4>
+
+                <div id="new-cards"></div>
+
+                <button type="button" id="add-card-button">
+                    Add Card
+                </button>
+
+                <button type="submit">Save Inventory Page</button>
+            </form>
+
             <h3> Manage Inventory</h3>
-            
             <div id="admin-inventory"></div>
         </section>
     </main>
