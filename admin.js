@@ -11,8 +11,6 @@ const adminInventory = document.getElementById("admin-inventory");
 const addPageForm = document.getElementById("add-page-form");
 const addCardButton = document.getElementById("add-card-button");
 const newCards = document.getElementById("new-cards");
-const cloudName = "npezncva";
-const uploadPreset = "photocard-upload";
 
 const adminUID = "H80SEyhoE3eFouZd9xTuqXNXklD3"
 
@@ -177,49 +175,17 @@ addCardButton.addEventListener("click", () => {
     newCards.appendChild(cardRow);
 });
 
-async function uploadImage(file) {
-    const allowedTypes = [
-        "image/png",
-        "image/jpeg",
-        "image/webp"
-    ];
-
-    if (!file || !allowedTypes.includes(file.type)) {
-        throw new Error("Please select a valid image.");
-    }
-
-    if(file.size > 5 * 1024 * 1024) {
-        throw new Error("Image must be under 5 MB.")
-    }
-
-    const formData = new FormData();
-
-    formData.append("file", file);
-    formData.append("upload_preset", uploadPreset);
-
-    const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        {
-            method: "POST",
-            body: formData
-        }
-    );
-
-    if (!response.ok) {
-        throw new Error("Image upload failed.");
-    }
-
-    const data = await response.json();
-
-    return data.secure_url;
-};
-
 addPageForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const member = document.getElementById("member").value;
     const page = document.getElementById("page-letter").value.trim().toUpperCase();
-    const imageFile = document.getElementById("page-image").files[0];
+    const imageURL = document.getElementById("page-image").value.trim();
+
+    if (!imageURL.startsWith("https://res.cloudinary.com/npezncva/image/upload/")) {
+        alert("Please enter a valid Cloudinary image URL.");
+        return;
+    }
 
     const cards = [];
 
@@ -241,8 +207,6 @@ addPageForm.addEventListener("submit", async (event) => {
     try {
         const pageID = `${member.toLowerCase()}-${page.toLowerCase()}`;
         const pageRef = doc(db, "inventory", pageID);
-
-        const imageURL = await uploadImage(imageFile);
 
         await runTransaction(db, async transaction => {
             const existingPage = await transaction.get(pageRef);
