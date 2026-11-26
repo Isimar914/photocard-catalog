@@ -103,11 +103,20 @@ async function loadAdminInventory() {
                 statusSelect: statusSelect
             });
 
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.type = "button";
+
+            removeButton.addEventListener("click", () => {
+                const index = editedCards.findIndex(item => item.cardID === cardID);
+                editedCards.splice(index, 1);
+                cardRow.remove();
+            });
+
             cardRow.appendChild(cardID);
             cardRow.appendChild(priceInput);
             cardRow.appendChild(statusSelect);
-
-
+            cardRow.appendChild(removeButton);
             inventoryPage.appendChild(cardRow);
         });
 
