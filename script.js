@@ -23,12 +23,16 @@ function displayInventory() {
 
         inventoryPage.classList.add("inventory-page");
 
-        inventoryPage.innerHTML = `
-            <h3>${page.member} - Page ${page.page}</h3>
-            <img src="${page.image}"
-                 alt="${page.member} Page ${page.page}"
-                 class="photocard-sheet">
-        `;
+        const heading = document.createElement("h3");
+        heading.textContent = `${page.member} - Page ${page.page}`;
+
+        const image = document.createElement("img");
+        image.src = page.image;
+        image.alt = `${page.member} Page ${page.page}`;
+        image.classList.add("photocard-sheet");
+
+        inventoryPage.appendChild(heading);
+        inventoryPage.appendChild(image); 
 
         const priceGrid = document.createElement("div");
         priceGrid.classList.add("price-grid");
@@ -37,16 +41,28 @@ function displayInventory() {
             const priceBox = document.createElement("div");
             priceBox.classList.add("price-box");
 
-            priceBox.innerHTML = `
-                <strong>${card.id}</strong>
-                <span>$${card.price}</span>
-                <span class="${card.status}">
-                    ${card.status === "available" ? "Available" :
-                      card.status === "sold" ? "Sold":
-                      "Not for Sale"
-                    }
-                </span>
-            `;
+            const cardID = document.createElement("strong");
+            cardID.textContent = card.id;
+
+            const price = document.createElement("span");
+            price.textContent = `$${card.price}`;
+
+            const status = document.createElement("span");
+
+            if (card.status === "available") {
+                status.textContent = "Available";
+                status.classList.add("available");
+            } else if (card.status === "sold") {
+                status.textContent = "Sold";
+                status.classList.add("sold");
+            } else {
+                status.textContent = "Not for Sale";
+                status.classList.add("not-for-sale");
+            }
+
+            priceBox.appendChild(cardID);
+            priceBox.appendChild(price);
+            priceBox.appendChild(status);
 
             priceGrid.appendChild(priceBox);
         });
