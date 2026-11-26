@@ -71,7 +71,7 @@ async function loadAdminInventory() {
 
         inventoryPage.appendChild(heading);
 
-        page.cards.forEach(card => {
+        function createCardRow(card) {
             const cardRow = document.createElement("div");
             cardRow.classList.add("admin-card-row");
 
@@ -118,7 +118,27 @@ async function loadAdminInventory() {
             cardRow.appendChild(statusSelect);
             cardRow.appendChild(removeButton);
             inventoryPage.appendChild(cardRow);
+        }
+
+        page.cards.forEach(card => {
+            createCardRow(card);
         });
+
+        const addButton = document.createElement("button");
+        addButton.textContent = "Add Card";
+        addButton.type = "button";
+
+        addButton.addEventListener("click", () => {
+            createCardRow({
+                id: "",
+                price: 0,
+                status: "available"
+            });
+            inventoryPage.appendChild(addButton);
+            inventoryPage.appendChild(saveButton);
+        });
+
+        inventoryPage.appendChild(addButton);
 
         const saveButton = document.createElement("button");
         saveButton.textContent = "Save Changes";
@@ -126,6 +146,7 @@ async function loadAdminInventory() {
         saveButton.addEventListener("click", async() => {
             const updatedCards = editedCards.map(item => ({
                 ...item.card,
+                id: item.cardID.value.trim().toUpperCase(),
                 price: Number(item.priceInput.value),
                 status: item.statusSelect.value
             }));
