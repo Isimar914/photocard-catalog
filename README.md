@@ -6,7 +6,7 @@ A web-based inventory catalog that helps an independent photocard seller share u
 **Partner's role:** Owner  
 **Team:** Isimar Lara  
 **Course:** CMP 464/343 Product 2  
-**Last updated:** November 24, 2026  
+**Last updated:** November 25, 2026  
 **Live demo:** In development — see Demo section  
 **Target completion:** November 30, 2026
 

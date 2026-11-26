@@ -3,12 +3,22 @@ import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/13.4.
 
 let inventoryPages = [];
 
+let selectedMember = "All"
 const gallery = document.getElementById("gallery-grid");
 
 function displayInventory() {
     gallery.innerHTML = "";
 
-    inventoryPages.forEach(page => {
+    const filteredPages = inventoryPages.filter(page => 
+        selectedMember === "All" || page.member === selectedMember
+    );
+
+    if (filteredPages.length === 0) {
+        gallery.textContent = "No inventory available yet."
+        return;
+    }
+    
+    filteredPages.forEach(page => {
         const inventoryPage = document.createElement("div");
 
         inventoryPage.classList.add("inventory-page");
@@ -58,5 +68,14 @@ function loadInventory() {
         displayInventory();
     });
 }
+
+const memberTabs = document.querySelectorAll("#member-tabs button");
+
+memberTabs.forEach(button => {
+    button.addEventListener("click", () => {
+        selectedMember = button.dataset.member;
+        displayInventory();
+    });
+});
 
 loadInventory();
