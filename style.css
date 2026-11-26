@@ -28,7 +28,7 @@ body {
     padding: 25px;
     border-radius: 12px;
  }
- #gallery h22 {
+ #gallery h2 {
     color: #a63872;
  }
 
@@ -139,4 +139,92 @@ body {
 
 #login-message {
     text-align: center;
+}
+#admin-dashboard {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+#admin-dashboard h2 {
+    color: #a63872;
+}
+#logout-button {
+    background-color: #d63384;
+    color:white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+#add-page-form {
+    display:flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+#admin-dashboard input,
+#admin-dashboard select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+#add-page-form a {
+    color: #a63872;
+}
+.admin-inventory-page {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+.admin-inventory-page h3 {
+    color: #a63872;
+}
+.admin-card-row,
+.new-card.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.5fr auto;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.admin-card-row input,
+.new-card.row input {
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+}
+#admin-dashboard button {
+    background-color: #d63384;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+#admin-dashboard button:hover {
+    background-color: #b82b70;
+}
+.admin-inventory-page > button {
+    margin-right:10px;
+    margin-top: 10px;
+}
+.admin-card-row button,
+.new-card.row button {
+    background-color: #f5d9e8 !important;
+    color: #a63872 !important;
+}
+@media (max-width: 60px) {
+    .admin-card-row,
+    .new-card.row {
+        grid-template-columns: 1fr 1fr;
+    }
+    #admin-dashboard {
+        padding: 10px;
+    }
 }
